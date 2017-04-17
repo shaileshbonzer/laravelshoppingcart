@@ -104,13 +104,11 @@ class Cart {
      * @param float $price
      * @param int $quantity
      * @param array $attributes
-     * @param string $productId
-     * @param int $isTaxable
      * @param CartCondition|array $conditions
      * @return $this
      * @throws InvalidItemException
      */
-    public function add($id, $name = null, $price = null, $quantity = null, $attributes = array(), $productId = null, $isTaxable = 0, $conditions = array())
+    public function add($id, $name = null, $price = null, $quantity = null, $attributes = array(), $conditions = array())
     {
         // if the first argument is an array,
         // we will need to call add again
@@ -128,8 +126,6 @@ class Cart {
                         $item['price'],
                         $item['quantity'],
                         Helpers::issetAndHasValueOrAssignDefault($item['attributes'], array()),
-                        $item['productId'],
-                        $item['isTaxable'],
                         Helpers::issetAndHasValueOrAssignDefault($item['conditions'], array())
                     );
                 }
@@ -142,8 +138,6 @@ class Cart {
                     $id['price'],
                     $id['quantity'],
                     Helpers::issetAndHasValueOrAssignDefault($id['attributes'], array()),
-                    $id['productId'],
-                    $id['isTaxable'],
                     Helpers::issetAndHasValueOrAssignDefault($id['conditions'], array())
                 );
             }
@@ -158,8 +152,6 @@ class Cart {
             'price' => Helpers::normalizePrice($price),
             'quantity' => $quantity,
             'attributes' => new ItemAttributeCollection($attributes),
-            'productId' => $productId,
-            'isTaxable' => $isTaxable,
             'conditions' => $conditions,
         ));
 
@@ -644,8 +636,6 @@ class Cart {
             'price' => 'required|numeric',
             'quantity' => 'required|numeric|min:1',
             'name' => 'required',
-            'productId' => 'required',
-            'isTaxable' => 'required|numeric'
         );
 
         $validator = CartItemValidator::make($item, $rules);

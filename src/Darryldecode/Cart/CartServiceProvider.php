@@ -12,27 +12,13 @@ class CartServiceProvider extends ServiceProvider {
 	protected $defer = false;
 
 	/**
-	 * Boot the service provider.
-	 */
-	public function boot()
-	{
-		if (function_exists('config_path')) {
-			$this->publishes([
-				__DIR__.'/config/config.php' => config_path('shopping_cart.php'),
-			], 'config');
-		}
-	}
-
-	/**
 	 * Register the service provider.
 	 *
 	 * @return void
 	 */
 	public function register()
 	{
-		$this->mergeConfigFrom(__DIR__.'/config/config.php', 'shopping_cart');
-
-		$this->app->singleton('cart', function($app)
+		$this->app['cart'] = $this->app->share(function($app)
 		{
 			$storage = $app['session'];
 			$events = $app['events'];
@@ -43,8 +29,7 @@ class CartServiceProvider extends ServiceProvider {
 				$storage,
 				$events,
 				$instanceName,
-				$session_key,
-				config('shopping_cart')
+				$session_key
 			);
 		});
 	}

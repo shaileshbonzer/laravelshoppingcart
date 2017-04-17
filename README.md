@@ -1,5 +1,6 @@
 # Laravel 5 Shopping Cart
 [![Build Status](https://travis-ci.org/darryldecode/laravelshoppingcart.svg?branch=master)](https://travis-ci.org/darryldecode/laravelshoppingcart)
+[![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/darryldecode/laravelshoppingcart/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/darryldecode/laravelshoppingcart/)
 [![Total Downloads](https://poser.pugx.org/darryldecode/cart/d/total.svg)](https://packagist.org/packages/darryldecode/cart)
 [![License](https://poser.pugx.org/darryldecode/cart/license.svg)](https://packagist.org/packages/darryldecode/cart)
 
@@ -7,35 +8,44 @@ A Shopping Cart Implementation for Laravel Framework
 
 ##INSTALLATION
 
-Install the package through [Composer](http://getcomposer.org/). 
+Install the package through [Composer](http://getcomposer.org/). Edit your project's `composer.json` file by adding:
 
-For Laravel 5.1~:
-```composer require "darryldecode/cart:~2.0"```
+### Laravel 5
+
+```php
+"require": {
+	"laravel/framework": "5.0.*",
+	"darryldecode/cart": "dev-master"
+}
+```
+
+Next, run the Composer update command from the Terminal:
+
+    composer update
     
-For Laravel 5.4~:
-```composer require "darryldecode/cart:~3.0"```
+    or
+    
+    composer update "darryldecode/cart"
 
 ##CONFIGURATION
 
-1. Open config/app.php and add this line to your Service Providers Array
+1. Open config/app.php and addd this line to your Service Providers Array
   ```php
-  Darryldecode\Cart\CartServiceProvider::class
+  'Darryldecode\Cart\CartServiceProvider'
   ```
-
-2. Open config/app.php and add this line to your Aliases
+  
+2. Open config/app.php and addd this line to your Aliases
 
 ```php
-  'Cart' => Darryldecode\Cart\Facades\CartFacade::class
+  'Cart' => 'Darryldecode\Cart\Facades\CartFacade'
   ```
-
+  
 ## HOW TO USE
 * [Usage](#usage)
 * [Conditions](#conditions)
-* [Items](#items)
 * [Instances](#instances)
 * [Exceptions](#exceptions)
 * [Events](#events)
-* [Format Response](#format)
 * [Examples](#examples)
 * [Changelogs](#changelogs)
 * [License](#license)
@@ -152,7 +162,7 @@ Removing an item on a cart is very easy:
  *
  * @param $id
  */
-
+   
 Cart::remove(456);
 ```
 
@@ -270,7 +280,7 @@ Conditions can be added on:
 First let's add a condition on a Cart Bases:
 
 There are also several ways of adding a condition on a cart:
-NOTE:
+NOTE: 
 
 When adding a condition on a cart bases, the 'target' should have value of 'subtotal'.
 And when adding a condition on an item, the 'target' should be 'item'.
@@ -300,20 +310,15 @@ $condition1 = new \Darryldecode\Cart\CartCondition(array(
     'type' => 'tax',
     'target' => 'subtotal',
     'value' => '12.5%',
-    'order' => 2
 ));
 $condition2 = new \Darryldecode\Cart\CartCondition(array(
     'name' => 'Express Shipping $15',
     'type' => 'shipping',
     'target' => 'subtotal',
     'value' => '+15',
-    'order' => 1
 ));
 Cart::condition($condition1);
 Cart::condition($condition2);
-
-// The property 'Order' lets you add different conditions through for example a shopping process with multiple
-// pages and still be able to set an order to apply the conditions. If no order is defined defaults to 0 
 
 // or add multiple conditions as array
 Cart::condition([$condition1, $condition2]);
@@ -326,7 +331,6 @@ foreach($carConditions as $condition)
     $condition->getName(); // the name of the condition
     $condition->getType(); // the type
     $condition->getValue(); // the value of the condition
-    $condition->getOrder(); // the order of the condition
     $condition->getAttributes(); // the attributes of the condition, returns an empty [] if no attributes added
 }
 
@@ -378,7 +382,7 @@ $product = array(
             'attributes' => array(),
             'conditions' => $saleCondition
         );
-
+        
 // finally add the product on the cart
 Cart::add($product);
 
@@ -401,7 +405,7 @@ $itemCondition3 = new \Darryldecode\Cart\CartCondition(array(
     'target' => 'item',
     'value' => '+10',
 ));
-
+  
 $item = array(
           'id' => 456,
           'name' => 'Sample Item 1',
@@ -410,7 +414,7 @@ $item = array(
           'attributes' => array(),
           'conditions' => [$itemCondition1, $itemCondition2, $itemCondition3]
       );
-
+        
 Cart::add($item);
 ```
 
@@ -436,7 +440,7 @@ $coupon101 = new CartCondition(array(
             'target' => 'item',
             'value' => '-5%',
         ));
-
+        
 Cart::addItemCondition($productID, $coupon101);
 ```
 
@@ -480,17 +484,6 @@ Remove Specific Item Condition: **Cart::removeItemCondition($itemId, $conditionN
 Cart::removeItemCondition($itemId, $conditionName)
 ```
 
-Clear all Item Conditions: **Cart::clearItemConditions($itemId)**
-```php
-/**
-* remove all conditions that has been applied on an item that is already on the cart
-*
-* @param $itemId
-* @return bool
-*/
-Cart::clearItemConditions($itemId)
-```
-
 Get conditions by type: **Cart::getConditionsByType($type)**
 ```php
 /**
@@ -516,60 +509,6 @@ Remove conditions by type: **Cart::removeConditionsByType($type)**
 */
 public function removeConditionsByType($type)
 ```
-
-## Items
-
-The method **Cart::getContent()** returns a collection of items. 
-
-To get the id of an item, use the property **$item->id**.
-
-To get the name of an item, use the property **$item->name**.
-
-To get the quantity of an item, use the property **$item->quantity**.
-
-To get the attributes of an item, use the property **$item->attributes**.
-
-To get the price of a single item without the conditions applied, use the property **$item->price**.
-
-To get the subtotal of an item without the conditions applied, use the method **$item->getPriceSum()**. 
-```php
-/**
-* get the sum of price
-*
-* @return mixed|null
-*/
-public function getPriceSum()
-
-```
-
-To get the price of a single item without the conditions applied, use the method 
-
-**$item->getPriceWithConditions()**.
-```php
-/**
-* get the single price in which conditions are already applied
-*
-* @return mixed|null
-*/
-public function getPriceWithConditions() 
-
-```
-
-To get the subtotal of an item with the conditions applied, use the method 
-
-**$item->getPriceSumWithConditions()**
-```php
-/**
-* get the sum of price in which conditions are already applied
-*
-* @return mixed|null
-*/
-public function getPriceSumWithConditions()
-
-```
-
-**NOTE**: When you get price with conditions applied, only the conditions assigned to the current item will be calculated. 
-Cart conditions won't be applied to price.
 
 ## Instances
 
@@ -629,16 +568,6 @@ So for you wishlist cart instance, events will look like this:
 * wishlist.adding($items, $cart)
 * wishlist.added($items, $cart) and so on..
 
-## Format Response
-
-Now you can format all the responses. You can publish the config file from the package or use env vars to set the configuration.
-The options you have are:
-
-* format_numbers or env('SHOPPING_FORMAT_VALUES', false) => Activate or deactivate this feature. Default to false,
-* decimals or env('SHOPPING_DECIMALS', 0) => Number of decimals you want to show. Defaults to 0.
-* dec_point or env('SHOPPING_DEC_POINT', '.') => Decimal point type. Defaults to a '.'.
-* thousands_sep or env('SHOPPING_THOUSANDS_SEP', ',') => Thousands separator for value. Defaults to ','.
- 
 ## Examples
 
 ```php
@@ -671,16 +600,13 @@ foreach($items as $item)
 {
     $item->id; // the Id of the item
     $item->name; // the name
-    $item->price; // the single price without conditions applied
-    $item->getPriceSum(); // the subtotal without conditions applied
-    $item->getPriceWithConditions(); // the single price with conditions applied
-    $item->getPriceSumWithConditions(); // the subtotal with conditions applied
+    $item->price; // the price
     $item->quantity; // the quantity
     $item->attributes; // the attributes
-
+    
     // Note that attribute returns ItemAttributeCollection object that extends the native laravel collection
     // so you can do things like below:
-
+    
     if( $item->attributes->has('size') )
     {
         // item has attribute size
@@ -696,10 +622,7 @@ $items->each(function($item)
 {
     $item->id; // the Id of the item
     $item->name; // the name
-    $item->price; // the single price without conditions applied
-    $item->getPriceSum(); // the subtotal without conditions applied
-    $item->getPriceWithConditions(); // the single price with conditions applied
-    $item->getPriceSumWithConditions(); // the subtotal with conditions applied
+    $item->price; // the price
     $item->quantity; // the quantity
     $item->attributes; // the attributes
 

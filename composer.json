@@ -1,5 +1,5 @@
 {
-    "name": "shaileshbonzer/cart",
+    "name": "darryldecode/cart",
     "description": "Laravel 5 Shopping cart",
     "keywords": ["laravel", "shopping cart", "cart"],
     "license": "MIT",
@@ -11,9 +11,8 @@
     ],
     "require": {
         "php": ">=5.4.0",
-        "illuminate/support": "5.0.*|5.1.*|5.2.*|5.3.*|5.4.*",
-        "illuminate/validation": "5.0.*|5.1.*|5.2.*|5.3.*|5.4.*",
-        "illuminate/translation": "5.0.*|5.1.*|5.2.*|5.3.*|5.4.*"
+        "illuminate/support": "5.0.x|5.1.x",
+        "illuminate/validation": "5.0.x|5.1.x"
     },
     "require-dev": {
         "mockery/mockery": "~0.9",
