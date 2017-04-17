@@ -13,9 +13,16 @@ Install the package through [Composer](http://getcomposer.org/). Edit your proje
 ### Laravel 5
 
 ```php
+"repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/shaileshbonzer/laravelshoppingcart"
+        }
+    ],
+
 "require": {
 	"laravel/framework": "5.0.*",
-	"darryldecode/cart": "dev-master"
+	"shaileshbonzer/cart": "dev-master"
 }
 ```
 
@@ -25,7 +32,7 @@ Next, run the Composer update command from the Terminal:
     
     or
     
-    composer update "darryldecode/cart"
+    composer update "shaileshbonzer/cart"
 
 ##CONFIGURATION
 
@@ -79,7 +86,9 @@ Cart::add(array(
     'name' => 'Sample Item',
     'price' => 67.99,
     'quantity' => 4,
-    'attributes' => array()
+    'attributes' => array(),
+    'productId' => 456,
+    'isTaxable' => 0
 ));
 
 // add multiple items at one time
@@ -89,7 +98,9 @@ Cart::add(array(
       'name' => 'Sample Item 1',
       'price' => 67.99,
       'quantity' => 4,
-      'attributes' => array()
+      'attributes' => array(),
+      'productId' => 456,
+      'isTaxable' => 0
   ),
   array(
       'id' => 568,
@@ -99,13 +110,15 @@ Cart::add(array(
       'attributes' => array(
         'size' => 'L',
         'color' => 'blue'
-      )
+      ),
+      'productId' => 568,
+      'isTaxable' => 0
   ),
 ));
 
 // NOTE:
-// Please keep in mind that when adding an item on cart, the "id" should be unique as it serves as
-// row identifier as well. If you provide same ID, it will assume the operation will be an update to its quantity
+// Please keep in mind that when adding an item on cart, the "productId" should be unique as it serves as
+// row identifier as well. If you provide same productId, it will assume the operation will be an update to its quantity
 // to avoid cart item duplicates
 ```
 
